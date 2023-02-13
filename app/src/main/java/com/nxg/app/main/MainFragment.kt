@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +33,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val bannerRecyclerView = binding.bannerRecyclerview
@@ -64,13 +63,13 @@ class MainFragment : Fragment() {
         bannerRecyclerViewVertical.adapter = bannerAdapter
         bannerRecyclerviewRecommend.adapter = recommendAdapter
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.bannerList.observe(viewLifecycleOwner, {
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.bannerList.observe(viewLifecycleOwner) {
             dataList.clear()
             dataList.addAll(it)
             bannerAdapter.notifyDataSetChanged()
             recommendAdapter.notifyDataSetChanged()
-        })
+        }
         return root
     }
 
